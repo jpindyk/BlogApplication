@@ -25,6 +25,7 @@ public class Post {
     @NotBlank
     private String title;
     private String url;
+    @Lob
     @NotBlank
     private String content;
     private String description;
