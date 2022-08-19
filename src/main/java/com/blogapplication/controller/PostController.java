@@ -4,10 +4,13 @@ import com.blogapplication.payload.PostDto;
 import com.blogapplication.service.PostService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -33,9 +36,38 @@ public class PostController {
     }
 
     @PostMapping("admin/posts")
-    public String createPost(@ModelAttribute PostDto postDto){
+    public String createPost(@Valid @ModelAttribute("post") PostDto postDto,
+                                BindingResult result,
+                                Model model){
+        if(result.hasErrors()){
+            model.addAttribute("post", postDto);
+            return "admin/create_post";
+        }
         postDto.setUrl(getUrl(postDto.getTitle()));
         postService.createPost(postDto);
+        return "redirect:/admin/posts";
+    }
+
+    @GetMapping("/admin/posts/{postId}/edit")
+    public String editPostForm(@PathVariable Long postId,
+                               Model model) {
+        PostDto postDto = postService.findPostById(postId);
+        model.addAttribute("post", postDto);
+        return "admin/edit_post";
+    }
+    @PostMapping("/admin/posts/{postId}")
+    public String updatePost(@PathVariable Long postId,
+                             @Valid @ModelAttribute PostDto postDto,
+                             BindingResult result,
+                             Model model){
+
+
+        if(result.hasErrors()){
+            postDto.setId(postId);
+            model.addAttribute("post", postDto);
+            return "admin/edit_post";
+        }
+        postService.updatePost(postDto);
         return "redirect:/admin/posts";
     }
 
