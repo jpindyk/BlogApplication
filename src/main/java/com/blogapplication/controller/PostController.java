@@ -71,6 +71,20 @@ public class PostController {
         return "redirect:/admin/posts";
     }
 
+    @GetMapping("/admin/posts/{postId}/delete")
+    public String deletePost(@PathVariable("postId") Long postId){
+        postService.deletePost(postId);
+        return "redirect:/admin/posts";
+    }
+
+    @GetMapping("/admin/posts/{postId}/view")
+    public String viewPost(@PathVariable("postUrl") String postUrl,
+                           Model model) {
+        PostDto postDto = postService.findPostByUrl(postUrl);
+        model.addAttribute("post", postDto);
+        return "admin/view_post";
+    }
+
     private static String getUrl(String postTitle) {
         String title = postTitle.trim().toLowerCase();
         String url= title
