@@ -54,4 +54,11 @@ public class PostServiceImplementation implements PostService{
         Post post = repository.findByUrl(postUrl).get();
         return PostMapper.mapToPostDto(post);
     }
+
+    @Override
+    public List<PostDto> searchPost(String query) {
+        return repository.searchPosts(query).stream()
+                .map(p -> PostMapper.mapToPostDto(p))
+                .collect(Collectors.toList());
+    }
 }

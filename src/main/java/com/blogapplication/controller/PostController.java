@@ -5,10 +5,7 @@ import com.blogapplication.service.PostService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -83,8 +80,16 @@ public class PostController {
         PostDto postDto = postService.findPostByUrl(postUrl);
         model.addAttribute("post", postDto);
         return "admin/view_post";
+    }
+    @GetMapping("/admin/posts/search")
+    public String searchPosts(@RequestParam(value = "query") String query,
+                              Model model){
+        List<PostDto> postDtos = postService.searchPost(query);
+        model.addAttribute("posts", postDtos);
+        return "admin/posts";
 
     }
+
 
     private static String getUrl(String postTitle) {
         String title = postTitle.trim().toLowerCase();
