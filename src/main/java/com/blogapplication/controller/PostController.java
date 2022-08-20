@@ -49,15 +49,15 @@ public class PostController {
     }
 
     @GetMapping("/admin/posts/{postId}/edit")
-    public String editPostForm(@PathVariable Long postId,
-                               Model model) {
+    public String editPostForm(@PathVariable("postId") Long postId,
+                               Model model){
         PostDto postDto = postService.findPostById(postId);
         model.addAttribute("post", postDto);
         return "admin/edit_post";
     }
     @PostMapping("/admin/posts/{postId}")
-    public String updatePost(@PathVariable Long postId,
-                             @Valid @ModelAttribute PostDto postDto,
+    public String updatePost(@PathVariable("postId") Long postId,
+                             @Valid @ModelAttribute("post") PostDto postDto,
                              BindingResult result,
                              Model model){
 

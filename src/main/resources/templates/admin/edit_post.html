@@ -4,16 +4,14 @@
 >
 
 <div th:replace="admin/header :: header"></div>
-
 <body>
 <div th:replace="admin/header :: navbar"></div>
-<br/><br/>
-
+<br /><br />
 <div class="container">
     <div class="row col-md-8 offset-md-2">
         <div class="card">
             <div class="card-header">
-                <h2 class="text-center">Edit Post</h2>
+                <h2 class="text-center"> Edit Post</h2>
             </div>
             <div class="card-body">
                 <form role="form" method="post" th:action="@{/admin/posts/{postId}(postId=${post.id})}" th:object="${post}">
@@ -25,16 +23,16 @@
                                 type="text"
                                 class="form-control"
                                 id="title"
-                                placeholder="Enter title"
+                                placeholder="Enter post title"
                                 name="title"
                                 th:field="*{title}"
                         />
-                        <p th:if="${#fields.hasErrors('title')}"
-                           class="text-danger"
+                        <p th:if="${#fields.hasErrors('title')}" class="text-danger"
                            th:errors="*{title}"></p>
                     </div>
+
                     <div class="mb-3">
-                        <label class="form-label"> Description </label>
+                        <label class="form-label">Description</label>
                         <textarea
                                 class="form-control"
                                 id="description"
@@ -45,39 +43,38 @@
                         >
 
                         </textarea>
-                        <p th:if="${#fields.hasErrors('description')}"
-                           class="text-danger"
+                        <p th:if="${#fields.hasErrors('description')}" class="text-danger"
                            th:errors="*{description}"></p>
                     </div>
+
                     <div class="mb-3">
-                        <label class="form-label"> Content </label>
+                        <label class="form-label">Content</label>
                         <textarea
                                 class="form-control"
                                 id="content"
-                                placeholder="Enter content"
+                                placeholder="Enter post content"
                                 rows="12"
-                                name="description"
+                                name="content"
                                 th:field="*{content}"
                         >
-
                         </textarea>
-                        <p th:if="${#fields.hasErrors('content')}"
-                           class="text-danger"
+                        <p th:if="${#fields.hasErrors('content')}" class="text-danger"
                            th:errors="*{content}"></p>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
-
                 </form>
+
             </div>
         </div>
     </div>
-</div>
 
+</div>
+<br /><br /><br /><br /><br />
 <div th:replace="admin/footer :: footer"></div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
         crossorigin="anonymous"></script>
-<script src="https://cdn.ckeditor.com/ckeditor5/35.0.1/classic/ckeditor.js"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/34.2.0/classic/ckeditor.js"></script>
 <script>
     ClassicEditor
         .create( document.querySelector( '#content' ) )
