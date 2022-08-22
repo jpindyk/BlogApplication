@@ -1,14 +1,13 @@
 package com.blogapplication.payload;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,4 +23,5 @@ public class PostDto {
     private String description;
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;
+    private Set<CommentDto> comments;
 }

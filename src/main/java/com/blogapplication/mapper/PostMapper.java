@@ -3,6 +3,8 @@ package com.blogapplication.mapper;
 import com.blogapplication.model.Post;
 import com.blogapplication.payload.PostDto;
 
+import java.util.stream.Collectors;
+
 public class PostMapper {
 
     public static PostDto mapToPostDto (Post post) {
@@ -14,6 +16,10 @@ public class PostMapper {
                 .description(post.getDescription())
                 .createdOn(post.getCreatedOn())
                 .updatedOn(post.getUpdatedOn())
+                .comments(post.getCommentSet()
+                        .stream()
+                        .map(c->CommentMapper.mapToCommentDto(c))
+                        .collect(Collectors.toSet()))
                 .build();
 
     }
