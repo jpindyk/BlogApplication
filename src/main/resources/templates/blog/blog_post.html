@@ -23,7 +23,7 @@
                         <p><b>Name: </b><strong th:text="${comment.name}"></strong></p>
                         <p><b>Date: </b><strong th:text="${#temporals.format(comment.createdOn, 'dd MMM yyyy')}"></strong></p>
                         <p th:text="${comment.content}"></p>
-                        <br/>
+                        <hr/>
                     </div>
                 </div>
                 <div class="card">
