@@ -8,6 +8,9 @@ import com.blogapplication.repository.CommentRepository;
 import com.blogapplication.repository.PostRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class CommentServiceImplementation implements CommentService{
 
@@ -27,5 +30,18 @@ public class CommentServiceImplementation implements CommentService{
         comment.setPost(post);
         commentRepository.save(comment);
 
+    }
+
+    @Override
+    public List<CommentDto> findAllComments() {
+        return commentRepository.findAll()
+                .stream()
+                .map(c->CommentMapper.mapToCommentDto(c))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteComment(Long commentId) {
+        commentRepository.deleteById(commentId);
     }
 }

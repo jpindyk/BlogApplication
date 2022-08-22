@@ -1,6 +1,8 @@
 package com.blogapplication.controller;
 
+import com.blogapplication.payload.CommentDto;
 import com.blogapplication.payload.PostDto;
+import com.blogapplication.service.CommentService;
 import com.blogapplication.service.PostService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,9 +15,11 @@ import java.util.List;
 @Controller
 public class PostController {
     private PostService postService;
+    private CommentService commentService;
 
-    public PostController(PostService postService) {
+    public PostController(PostService postService, CommentService commentService) {
         this.postService = postService;
+        this.commentService = commentService;
     }
 
     @GetMapping("/admin/posts")
@@ -89,6 +93,14 @@ public class PostController {
         return "admin/posts";
 
     }
+
+    @GetMapping("/admin/posts/comments")
+    public String postComments(Model model){
+        List<CommentDto> comments = commentService.findAllComments();
+        model.addAttribute("comments", comments);
+        return "admin/comments";
+    }
+
 
 
     private static String getUrl(String postTitle) {
