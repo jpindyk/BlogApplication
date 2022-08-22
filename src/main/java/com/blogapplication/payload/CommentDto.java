@@ -20,12 +20,12 @@ import java.time.LocalDateTime;
 public class CommentDto {
 
     private Long id;
-    @NotBlank
+    @NotBlank(message = "You need to pass name")
     private String name;
-    @NotBlank
-    @Email
+    @NotBlank(message = "Email should not be blank or empty")
+    @Email(message = "You need to pass proper email")
     private String email;
-    @NotBlank
+    @NotBlank(message = "Comment should not be blank or empty")
     private String content;
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;
