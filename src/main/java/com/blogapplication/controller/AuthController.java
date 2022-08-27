@@ -28,6 +28,12 @@ public class AuthController {
         return "register";
     }
 
+    @GetMapping("/login")
+    public String loginPage(){
+        return "login";
+    }
+
+
     @PostMapping("/register/save")
     public String saveUser(@Valid @ModelAttribute("user") RegistrationDto registrationDto,
                            BindingResult result,
