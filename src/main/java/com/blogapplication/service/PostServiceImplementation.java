@@ -2,32 +2,53 @@ package com.blogapplication.service;
 
 import com.blogapplication.mapper.PostMapper;
 import com.blogapplication.model.Post;
+import com.blogapplication.model.User;
 import com.blogapplication.payload.PostDto;
 import com.blogapplication.repository.PostRepository;
+import com.blogapplication.repository.UserRepository;
+import com.blogapplication.util.SecurityUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class PostServiceImplementation implements PostService{
+public class PostServiceImplementation implements PostService {
 
     private PostRepository repository;
+    private UserRepository userRepository;
 
-    public PostServiceImplementation(PostRepository repository) {
+    public PostServiceImplementation(PostRepository repository, UserRepository userRepository) {
         this.repository = repository;
+        this.userRepository = userRepository;
     }
 
     @Override
     public List<PostDto> findAllPosts() {
+
         return repository.findAll().stream()
-                .map(s-> PostMapper.mapToPostDto(s))
+                .map(s -> PostMapper.mapToPostDto(s))
                 .collect(Collectors.toList());
+    }
+    @Override
+    public List<PostDto> findPostsByUser() {
+        String email = SecurityUtils.getCurrentUser().getUsername();
+        User user = userRepository.findByEmail(email);
+        Long userId = user.getId();
+
+        List<Post> posts = repository.findPostsByUser(userId);
+        return posts.stream().map(
+                p->PostMapper.mapToPostDto(p)
+        ).collect(Collectors.toList());
     }
 
     @Override
     public void createPost(PostDto postDto) {
+        String email = SecurityUtils.getCurrentUser().getUsername();
+        User user = userRepository.findByEmail(email);
+
         Post post = PostMapper.mapToPost(postDto);
+        post.setCreatedBy(user);
         repository.save(post);
     }
 
@@ -39,7 +60,10 @@ public class PostServiceImplementation implements PostService{
 
     @Override
     public void updatePost(PostDto postDto) {
+        String email = SecurityUtils.getCurrentUser().getUsername();
+        User user = userRepository.findByEmail(email);
         Post post = PostMapper.mapToPost(postDto);
+        post.setCreatedBy(user);
         repository.save(post);
     }
 

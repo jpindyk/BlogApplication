@@ -15,4 +15,5 @@ public interface PostService {
 
     PostDto findPostByUrl (String postUrl);
     List<PostDto> searchPost (String query);
+    public List<PostDto> findPostsByUser();
 }
