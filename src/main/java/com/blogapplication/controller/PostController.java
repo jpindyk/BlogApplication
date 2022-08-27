@@ -96,7 +96,7 @@ public class PostController {
 
     @GetMapping("/admin/posts/comments")
     public String postComments(Model model){
-        List<CommentDto> comments = commentService.findAllComments();
+        List<CommentDto> comments = commentService.findCommentsByPost();
         model.addAttribute("comments", comments);
         return "admin/comments";
     }
