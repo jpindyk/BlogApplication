@@ -4,6 +4,8 @@ import com.blogapplication.payload.CommentDto;
 import com.blogapplication.payload.PostDto;
 import com.blogapplication.service.CommentService;
 import com.blogapplication.service.PostService;
+import com.blogapplication.util.ROLE;
+import com.blogapplication.util.SecurityUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,7 +26,13 @@ public class PostController {
 
     @GetMapping("/admin/posts")
     public String posts(Model model) {
-        List<PostDto> posts = postService.findPostsByUser();
+        String role = SecurityUtils.getRole();
+        List<PostDto> posts = null;
+        if (ROLE.ROLE_ADMIN.name().equals(role)) {
+            posts = postService.findAllPosts();
+        } else {
+            posts = postService.findPostsByUser();
+        }
         model.addAttribute("posts", posts);
         return "/admin/posts";
     }
@@ -38,9 +46,9 @@ public class PostController {
 
     @PostMapping("admin/posts")
     public String createPost(@Valid @ModelAttribute("post") PostDto postDto,
-                                BindingResult result,
-                                Model model){
-        if(result.hasErrors()){
+                             BindingResult result,
+                             Model model) {
+        if (result.hasErrors()) {
             model.addAttribute("post", postDto);
             return "admin/create_post";
         }
@@ -51,19 +59,20 @@ public class PostController {
 
     @GetMapping("/admin/posts/{postId}/edit")
     public String editPostForm(@PathVariable("postId") Long postId,
-                               Model model){
+                               Model model) {
         PostDto postDto = postService.findPostById(postId);
         model.addAttribute("post", postDto);
         return "admin/edit_post";
     }
+
     @PostMapping("/admin/posts/{postId}")
     public String updatePost(@PathVariable("postId") Long postId,
                              @Valid @ModelAttribute("post") PostDto postDto,
                              BindingResult result,
-                             Model model){
+                             Model model) {
 
 
-        if(result.hasErrors()){
+        if (result.hasErrors()) {
             postDto.setId(postId);
             model.addAttribute("post", postDto);
             return "admin/edit_post";
@@ -73,21 +82,22 @@ public class PostController {
     }
 
     @GetMapping("/admin/posts/{postId}/delete")
-    public String deletePost(@PathVariable("postId") Long postId){
+    public String deletePost(@PathVariable("postId") Long postId) {
         postService.deletePost(postId);
         return "redirect:/admin/posts";
     }
 
     @GetMapping("/admin/posts/{postUrl}/view")
     public String viewPost(@PathVariable("postUrl") String postUrl,
-                           Model model){
+                           Model model) {
         PostDto postDto = postService.findPostByUrl(postUrl);
         model.addAttribute("post", postDto);
         return "admin/view_post";
     }
+
     @GetMapping("/admin/posts/search")
     public String searchPosts(@RequestParam(value = "query") String query,
-                              Model model){
+                              Model model) {
         List<PostDto> postDtos = postService.searchPost(query);
         model.addAttribute("posts", postDtos);
         return "admin/posts";
@@ -95,19 +105,25 @@ public class PostController {
     }
 
     @GetMapping("/admin/posts/comments")
-    public String postComments(Model model){
-        List<CommentDto> comments = commentService.findCommentsByPost();
+    public String postComments(Model model) {
+        String role = SecurityUtils.getRole();
+        List<CommentDto> comments = null;
+        if (ROLE.ROLE_ADMIN.name().equals(role)) {
+            comments = commentService.findAllComments();
+        } else {
+            comments = commentService.findCommentsByPost();
+        }
+
         model.addAttribute("comments", comments);
         return "admin/comments";
     }
 
 
-
     private static String getUrl(String postTitle) {
         String title = postTitle.trim().toLowerCase();
-        String url= title
+        String url = title
                 .replaceAll("\\s+", "-")
-                .replaceAll("[^A-Za-z0-9]","");
+                .replaceAll("[^A-Za-z0-9]", "");
         return url;
     }
 
