@@ -34,7 +34,7 @@ public class WebSpringSecurity {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/resources/**").permitAll()
-                .antMatchers("/regster/**").permitAll()
+                .antMatchers("/register/**").permitAll()
                 .antMatchers("/admin/**").hasAnyRole("ADMIN", "GUEST")
                 .and()
                 .formLogin(form->form
